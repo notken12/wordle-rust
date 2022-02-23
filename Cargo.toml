@@ -1,8 +1,8 @@
 [package]
-name = "my-project"
+name = "wordle-rust"
 version = "0.1.0"
-authors = ["runner"]
-edition = "2021"
+authors = ["notken12"]
+edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -10,3 +10,5 @@ edition = "2021"
 serde_json = "1.0.59"
 serde = { version = "1.0.117", features = ["derive"] }
 rand = "0.8.5"
+colored = "2"
+ansi_term = "0.12"
