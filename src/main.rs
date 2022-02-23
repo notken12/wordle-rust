@@ -17,7 +17,8 @@ fn main() {
     let answer: &str = &ANSWER_WORDS[rand_index];
 
   
-    println!("⬛🟨🟩 Wordle in Rust\n");
+    println!("{} in {} 🦀" , Style::new().bold().fg(Fixed(0)).on(Fixed(15)).paint(" Wordle "), Style::new().bold().fg(Fixed(166)).paint("Rust"));
+    println!("{}\n", Style::new().fg(Fixed(248)).paint("by @notken12"));
 
     let max_guesses = 6;
     let mut guesses = 0;
