@@ -1,8 +1,10 @@
-use crate::words::{Word, WordErr, WordLists};
+use crate::words::{Word, WordErr};
 // Import (via `use`) the `fmt` module to make it available.
 use std::fmt;
 use ansi_term::Style;
 use ansi_term::Color::Fixed;
+
+use crate::words::GUESS_WORDS;
 
 pub struct Guess {
     pub word: Word,
@@ -10,11 +12,11 @@ pub struct Guess {
 }
 
 impl Guess {
-    pub fn new(str: String, word_lists: &WordLists, answer: &String) -> Result<Guess, GuessErr> {
+    pub fn new(str: String, answer: &str) -> Result<Guess, GuessErr> {
         let word = Word::from_str(str);
         match word {
             Ok(word) => {
-                if word_lists.guess_words.contains(&word.0) {
+                if GUESS_WORDS.contains(&word.0.as_str()) {
                     let hints = get_hints(&word, &answer);
                     let guess = Guess { word, hints };
                     return Ok(guess);
@@ -47,7 +49,7 @@ impl fmt::Display for Guess {
     }
 }
 
-fn get_hints(word: &Word, answer: &String) -> [Hint; Word::LENGTH] {
+fn get_hints(word: &Word, answer: &str) -> [Hint; Word::LENGTH] {
     let mut hints: [Hint; Word::LENGTH] = [Hint::Wrong; Word::LENGTH];
     let word = &word.0;
 

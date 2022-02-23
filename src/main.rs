@@ -2,7 +2,7 @@ mod guess;
 mod words;
 
 use guess::{Guess, GuessErr};
-use words::{WordErr};
+use words::{WordErr, ANSWER_WORDS};
 use rand::Rng;
 use std::io::{stdin,stdout,Write};
 
@@ -12,11 +12,9 @@ use ansi_term::Color::Fixed;
 fn main() {
   print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
     // let enabled = ansi_term::enable_ansi_support();
-  
-    let word_lists = words::get_word_lists();
-  
-    let rand_index = rand::thread_rng().gen_range(0..word_lists.answer_words.len());
-    let answer: &String = &word_lists.answer_words[rand_index];
+    
+    let rand_index = rand::thread_rng().gen_range(0..ANSWER_WORDS.len());
+    let answer: &str = &ANSWER_WORDS[rand_index];
 
   
     println!("⬛🟨🟩 Wordle in Rust\n");
@@ -36,7 +34,7 @@ fn main() {
       
         guess = guess.trim().to_string();
 
-        let guess_result = Guess::new(guess, &word_lists, &answer);
+        let guess_result = Guess::new(guess, &answer);
 
         match guess_result {
             Err(err) => match err {
