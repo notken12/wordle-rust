@@ -56,36 +56,66 @@ fn get_hints(word: &Word, answer: &str) -> [Hint; Word::LENGTH] {
 
     let answer = answer.clone();
     let mut used = [false; Word::LENGTH];
-    for i in 0..word.len() {
-        // println!("{}", i);
-        // First check the same index
-        if !used[i] {
-            let at_same_index = answer.as_bytes()[i] as char;
-            if at_same_index == word.as_bytes()[i] as char {
+
+    for i in 0..answer.len() {
+      if !used[i] {
+        let at_same_index = word.as_bytes()[i] as char;
+            if at_same_index == answer.as_bytes()[i] as char {
                 hints[i] = Hint::Correct;
                 used[i] = true;
                 continue;
             }
-        }
+      }
 
-        // Then check the same letter at other places
+      // Then check the same letter at other places
         // println!("{}", answer.len());
-        for j in 0..answer.len() {
+        for j in 0..word.len() {
             if used[j] {
                 // println!("continue because {} is used", i);
                 continue;
             }
 
-            let at_index = answer.as_bytes()[j] as char;
-            let letter = word.as_bytes()[i] as char;
+            let at_index = word.as_bytes()[j] as char;
+            let letter = answer.as_bytes()[i] as char;
             // println!("a:{} g:{}", at_index, letter);
             if at_index == letter {
-                hints[i] = Hint::Elsewhere;
+                hints[j] = Hint::Elsewhere;
                 used[j] = true;
                 break;
             }
         }
     }
+    
+    // for i in 0..word.len() {
+    //     // println!("{}", i);
+    //     // First check the same index
+    //     if !used[i] {
+    //         let at_same_index = answer.as_bytes()[i] as char;
+    //         if at_same_index == word.as_bytes()[i] as char {
+    //             hints[i] = Hint::Correct;
+    //             used[i] = true;
+    //             continue;
+    //         }
+    //     }
+
+    //     // Then check the same letter at other places
+    //     // println!("{}", answer.len());
+    //     for j in 0..answer.len() {
+    //         if used[j] {
+    //             // println!("continue because {} is used", i);
+    //             continue;
+    //         }
+
+    //         let at_index = answer.as_bytes()[j] as char;
+    //         let letter = word.as_bytes()[i] as char;
+    //         // println!("a:{} g:{}", at_index, letter);
+    //         if at_index == letter {
+    //             hints[i] = Hint::Elsewhere;
+    //             used[j] = true;
+    //             break;
+    //         }
+    //     }
+    // }
 
     hints
 }
