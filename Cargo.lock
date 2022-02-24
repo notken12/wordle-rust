@@ -16,6 +16,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
+name = "enable-ansi-support"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "28d29d3ca9ba14c336417f8d7bc7f373e8c16d10c30cc0794b09d3cecab631ab"
+dependencies = [
+ "winapi",
+]
+
+[[package]]
 name = "getrandom"
 version = "0.2.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -101,5 +110,6 @@ name = "wordle-rust"
 version = "0.1.0"
 dependencies = [
  "ansi_term",
+ "enable-ansi-support",
  "rand",
 ]

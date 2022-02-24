@@ -8,4 +8,5 @@ edition = "2018"
 
 [dependencies]
 rand = "0.8.5"
-ansi_term = "0.12"
+ansi_term = "0.12.1"
+enable-ansi-support = "0.1.2"
