@@ -10,3 +10,6 @@ edition = "2018"
 rand = "0.8.5"
 ansi_term = "0.12.1"
 enable-ansi-support = "0.1.2"
+
+[target.'cfg(windows)'.build-dependencies]
+winres = "0.1"
