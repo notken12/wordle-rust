@@ -59,7 +59,7 @@ fn main() {
             },
             Ok(guess) => {
               guesses += 1;
-              println!("{}", guess);
+              guess.display();
 
               if guess.word.0.eq(answer) {
                 println!("\n🎉 Nice! You got it in {} {}.", guesses, if guesses == 1 {"try"} else {"tries"});
