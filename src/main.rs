@@ -45,7 +45,7 @@ fn main() {
             .read_line(&mut guess)
             .expect("Failed to read line");
       
-        guess = guess.trim().to_string();
+        guess = guess.trim().to_string().to_lowercase();
 
         let guess_result = Guess::new(guess, &answer);
 
