@@ -3,6 +3,8 @@ name = "wordle-rust"
 version = "0.1.0"
 authors = ["notken12"]
 edition = "2018"
+description = "Play Wordle in the command line"
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
