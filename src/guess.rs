@@ -3,8 +3,8 @@ use crate::words::{Word, WordErr};
 use ansi_term::Color::{Fixed, White};
 use ansi_term::Style;
 use std::fmt;
-use std::{thread, time::Duration};
 use std::io::{stdout, Write};
+use std::{thread, time::Duration};
 
 use crate::words::GUESS_WORDS;
 
@@ -29,26 +29,26 @@ impl Guess {
             Err(err) => Err(GuessErr::WordErr(err)),
         }
     }
-  pub fn display_hint(&self, i: usize) {
+    pub fn display_hint(&self, i: usize) {
         let word = self.word.0.to_uppercase();
         let mut result = String::new();
-                let hint = &self.hints[i];
-            let bytes = vec![32, word.as_bytes()[i], 32];
-            let letter = std::str::from_utf8(&bytes).expect("");
-            let formatted = format!("{}", hint.style(letter));
-            result += &formatted;
-            result += &" ";
-    print!("{}", result);
-      let _=stdout().flush();
-  }
-
-  pub fn display(&self) {
-    for i in 0..self.word.0.len() {
-      self.display_hint(i);
-      thread::sleep(Duration::from_millis(400));
+        let hint = &self.hints[i];
+        let bytes = vec![32, word.as_bytes()[i], 32];
+        let letter = std::str::from_utf8(&bytes).expect("");
+        let formatted = format!("{}", hint.style(letter));
+        result += &formatted;
+        result += &" ";
+        print!("{}", result);
+        let _ = stdout().flush();
     }
-    print!("\n");
-  }
+
+    pub fn display(&self) {
+        for i in 0..self.word.0.len() {
+            self.display_hint(i);
+            thread::sleep(Duration::from_millis(400));
+        }
+        print!("\n");
+    }
 }
 
 impl fmt::Display for Guess {
@@ -79,21 +79,25 @@ fn get_hints(word: &Word, answer: &str) -> [Hint; Word::LENGTH] {
     let answer = answer.clone();
     let mut used = [false; Word::LENGTH];
 
+    // Check for all letters that are in the right places
     for i in 0..answer.len() {
-      if !used[i] {
         let at_same_index = word.as_bytes()[i] as char;
-            if at_same_index == answer.as_bytes()[i] as char {
-                hints[i] = Hint::Correct;
-                used[i] = true;
-                continue;
-            }
-      }
+        if at_same_index == answer.as_bytes()[i] as char {
+            hints[i] = Hint::Correct;
+            used[i] = true;
+        }
+    }
 
-      // Then check the same letter at other places
-        // println!("{}", answer.len());
+    // Then check the same letter at other places
+    for i in 0..answer.len() {
+        if used[i] {
+            // skip over the letters that are in the right place
+            continue;
+        }
         for j in 0..word.len() {
             if used[j] {
                 // println!("continue because {} is used", i);
+                // skip over letters that already matched with answer
                 continue;
             }
 
@@ -126,9 +130,24 @@ pub enum Hint {
 impl Hint {
     pub fn style(&self, str: &str) -> String {
         match &self {
-            Hint::Wrong => Style::new().fg(White).on(Fixed(8)).bold().paint(str).to_string(),
-            Hint::Elsewhere => Style::new().fg(White).on(Fixed(178)).bold().paint(str).to_string(),
-            Hint::Correct => Style::new().fg(White).on(Fixed(70)).bold().paint(str).to_string(),
+            Hint::Wrong => Style::new()
+                .fg(White)
+                .on(Fixed(8))
+                .bold()
+                .paint(str)
+                .to_string(),
+            Hint::Elsewhere => Style::new()
+                .fg(White)
+                .on(Fixed(178))
+                .bold()
+                .paint(str)
+                .to_string(),
+            Hint::Correct => Style::new()
+                .fg(White)
+                .on(Fixed(70))
+                .bold()
+                .paint(str)
+                .to_string(),
         }
     }
 }
