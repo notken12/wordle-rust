@@ -9,24 +9,13 @@ use words::{WordErr, ANSWER_WORDS};
 use ansi_term::Color::Fixed;
 use ansi_term::Style;
 
-fn main() {
-    match enable_ansi_support::enable_ansi_support() {
-        Ok(()) => {
-            // ANSI escape codes were successfully enabled, or this is a non-Windows platform.
-        }
-        Err(_) => {
-            // The operation was unsuccessful, typically because it's running on an older
-            // version of Windows. The program may choose to disable ANSI color code output in
-            // this case.
-            panic!("Your OS doesn't support colored terminal output.");
-        }
-    }
+fn run_game() {
     // Use your terminal color library of choice here.
     // let enabled = ansi_term::enable_ansi_support();
     print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
 
     let rand_index = rand::thread_rng().gen_range(0..ANSWER_WORDS.len());
-    let answer: &str = &ANSWER_WORDS[rand_index];
+    let answer: &str = ANSWER_WORDS[rand_index];
 
     println!(
         "{} in {} 🦀",
@@ -47,17 +36,14 @@ fn main() {
 
         print!(
             "{}",
-            Style::new()
-                .fg(Fixed(246))
-                .paint("💭 Enter your guess: ")
-                .to_string()
+            Style::new().fg(Fixed(246)).paint("💭 Enter your guess: ")
         );
         let _ = stdout().flush();
         stdin().read_line(&mut guess).expect("Failed to read line");
 
         guess = guess.trim().to_string().to_lowercase();
 
-        let guess_result = Guess::new(guess, &answer);
+        let guess_result = Guess::new(guess, answer);
 
         match guess_result {
             Err(err) => match err {
@@ -80,7 +66,7 @@ fn main() {
                     println!("\n🚥 Hit enter to play again or press Ctrl+C to quit.");
                     let mut s = String::new();
                     stdin().read_line(&mut s).expect("Failed to read line");
-                    main();
+                    run_game();
                 }
             }
         }
@@ -90,5 +76,20 @@ fn main() {
     println!("\n🚥 Hit enter to play again or press Ctrl+C to quit.");
     let mut s = String::new();
     stdin().read_line(&mut s).expect("Failed to read line");
-    main();
+    run_game();
+}
+
+fn main() {
+    match enable_ansi_support::enable_ansi_support() {
+        Ok(()) => {
+            // ANSI escape codes were successfully enabled, or this is a non-Windows platform.
+        }
+        Err(_) => {
+            // The operation was unsuccessful, typically because it's running on an older
+            // version of Windows. The program may choose to disable ANSI color code output in
+            // this case.
+            panic!("Your OS doesn't support colored terminal output.");
+        }
+    }
+    run_game();
 }

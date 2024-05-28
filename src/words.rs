@@ -1,6 +1,8 @@
 mod answer_words;
 mod guess_words;
 
+use std::cmp::Ordering;
+
 pub use answer_words::ANSWER_WORDS;
 pub use guess_words::GUESS_WORDS;
 
@@ -17,12 +19,10 @@ impl Word {
     pub const LENGTH: usize = 5;
     pub fn from_str(str: String) -> Result<Word, WordErr> {
         let len = str.len();
-        if len > Word::LENGTH {
-            Err(WordErr::TooLongErr)
-        } else if len < Word::LENGTH {
-            Err(WordErr::TooShortErr)
-        } else {
-            Ok(Word(str))
+        match len.cmp(&Word::LENGTH) {
+            Ordering::Less => Err(WordErr::TooShortErr),
+            Ordering::Greater => Err(WordErr::TooLongErr),
+            Ordering::Equal => Ok(Word(str)),
         }
     }
 }
@@ -39,3 +39,4 @@ pub enum WordErr {
 
 //     return words;
 // }
+

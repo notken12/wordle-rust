@@ -19,11 +19,11 @@ impl Guess {
         match word {
             Ok(word) => {
                 if GUESS_WORDS.contains(&word.0.as_str()) {
-                    let hints = get_hints(&word, &answer);
+                    let hints = get_hints(&word, answer);
                     let guess = Guess { word, hints };
-                    return Ok(guess);
+                    Ok(guess)
                 } else {
-                    return Err(GuessErr::NotInWordListErr);
+                    Err(GuessErr::NotInWordListErr)
                 }
             }
             Err(err) => Err(GuessErr::WordErr(err)),
@@ -35,7 +35,7 @@ impl Guess {
         let hint = &self.hints[i];
         let bytes = vec![32, word.as_bytes()[i], 32];
         let letter = std::str::from_utf8(&bytes).expect("");
-        let formatted = format!("{}", hint.style(letter));
+        let formatted = hint.style(letter);
         result += &formatted;
         result += &" ";
         print!("{}", result);
@@ -47,7 +47,7 @@ impl Guess {
             self.display_hint(i);
             thread::sleep(Duration::from_millis(400));
         }
-        print!("\n");
+        println!();
     }
 }
 
@@ -63,7 +63,7 @@ impl fmt::Display for Guess {
             let hint = &self.hints[i];
             let bytes = vec![32, word.as_bytes()[i], 32];
             let letter = std::str::from_utf8(&bytes).expect("");
-            let formatted = format!("{}", hint.style(letter));
+            let formatted = hint.style(letter);
             result += &formatted;
             result += &" ";
         }
@@ -76,7 +76,6 @@ fn get_hints(word: &Word, answer: &str) -> [Hint; Word::LENGTH] {
     let mut hints: [Hint; Word::LENGTH] = [Hint::Wrong; Word::LENGTH];
     let word = &word.0;
 
-    let answer = answer.clone();
     let mut used = [false; Word::LENGTH];
 
     // Check for all letters that are in the right places
